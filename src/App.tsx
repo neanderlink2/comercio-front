@@ -4,7 +4,6 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import 'semantic-ui-css/semantic.min.css';
 import { SWRConfig } from 'swr';
 import { swrConfiguration } from './api';
 import AuthProvider from './contexts/AuthProvider';

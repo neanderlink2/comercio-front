@@ -3,8 +3,8 @@ import { toast } from 'react-toastify';
 import { ConfigInterface } from 'swr';
 import { HttpMethods } from '../models/Requests/RequestsMethods';
 
-export const URL_BASE_API = "https://localhost:5001/api/v1";
-const api = axios.create({ baseURL: URL_BASE_API });
+export const URL_BASE_API = "http://atelie-livre.azurewebsites.net";
+const api = axios.create({ baseURL: URL_BASE_API, params: { format: 'json' } });
 api.interceptors.request.use(config => {
     const userToken = JSON.parse(localStorage.getItem("@app/userToken") ?? "");
     if (!userToken) {
@@ -17,7 +17,7 @@ api.interceptors.request.use(config => {
 
 async function dataFetcher<TResponse = any>(url: string, method: HttpMethods = "get") {
     try {
-        const response = await api.request({ method, url });
+        const response = await api.request({ method, url, params: { format: 'json' } });
         return response.data as TResponse;
     } catch (error) {
         console.error("ERRO NA REQUISIÇÃO: ", error);

@@ -27,7 +27,6 @@ export default function ModulesRoutes({ onlyAuthenticated = false }: ModulesRout
                 <Route exact path="/login" render={(props: any) => <Login {...props} />} />
                 <Route exact path="/register" render={(props: any) => <Register {...props} />} />
                 <Route path="/" render={(props: any) => <Pages {...props} />} />
-                <Route path="*" component={() => <span>notfound</span>} />
             </Switch>
         </ThemeProvider>
     )

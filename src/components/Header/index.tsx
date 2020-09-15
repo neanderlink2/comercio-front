@@ -1,5 +1,6 @@
 import React from 'react';
 import { FiLogIn, FiSearch, FiUserPlus } from 'react-icons/fi';
+import { useHistory } from 'react-router-dom';
 import { Button, Dropdown, Header as HeaderUi, Input } from 'semantic-ui-react';
 import IconButton from '../IconButton';
 import { ActionButtons, Container } from './styles';
@@ -11,6 +12,7 @@ const options = [
 
 
 export default function Header() {
+    const history = useHistory();
     return (
         <Container>
             <HeaderUi as="h1" textAlign="center">Ateliê livre</HeaderUi>
@@ -24,14 +26,14 @@ export default function Header() {
                 />
             </div>
             <ActionButtons>
-                <Button animated >
+                <Button animated onClick={() => history.push('/register')}>
                     <Button.Content visible>Cadastrar</Button.Content>
                     <Button.Content hidden>
                         <FiUserPlus />
                     </Button.Content>
                 </Button>
 
-                <Button animated primary>
+                <Button animated primary onClick={() => history.push('/login')}>
                     <Button.Content visible>Entrar</Button.Content>
                     <Button.Content hidden>
                         <FiLogIn />
