@@ -1,7 +1,7 @@
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import React, { useRef } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import { Button, Form as FormUi, Grid, Header, Icon, Message, Segment } from 'semantic-ui-react';
 import InputField from '../../../components/Forms/input-field';
 import { useAuth } from '../../../contexts/AuthProvider';
@@ -13,11 +13,15 @@ type SubmitData = {
 
 export default function LoginPage() {
     const formRef = useRef<FormHandles>(null);
-    const { entrar, loading } = useAuth();
+    const { entrar, loading, authenticated } = useAuth();
     const history = useHistory();
 
     function handleSubmit(data: SubmitData) {
         entrar(data.login, data.password);
+    }
+
+    if (authenticated) {
+        return <Redirect to="/" />
     }
 
     return (

@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TryLoginPayload } from '../types';
+import { RegisterPayload } from '../types';
 
-const tryLoginSlice = createSlice({
-    name: 'account/login',
+const registerSlice = createSlice({
+    name: 'account/register',
     initialState: {
         isRequesting: false,
         successPayload: undefined,
         errors: [],
     },
     reducers: {
-        request: (state, action: PayloadAction<TryLoginPayload>) => {
+        request: (state, action: PayloadAction<RegisterPayload>) => {
             state.isRequesting = true;
         },
         success: (state, action) => {
@@ -25,5 +25,5 @@ const tryLoginSlice = createSlice({
     },
 });
 
-export const LoginActions = tryLoginSlice.actions;
-export default tryLoginSlice.reducer;
+export const RegisterActions = registerSlice.actions;
+export default registerSlice.reducer;

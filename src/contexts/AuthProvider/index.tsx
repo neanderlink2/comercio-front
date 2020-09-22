@@ -6,6 +6,8 @@ import React, {
   useEffect, useState
 } from "react";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import api from "../../api";
 import { usePersistedState } from "../../hooks/usePersistedState";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { FailedCallback, SuccessCallback } from "../../models/Requests/RequestsMethods";
@@ -57,10 +59,15 @@ export default function AuthProvider({ children }: PropsWithChildren<{}>) {
     setIsLoading(true);
     login(nomeUsuario, senha,
       (data) => {
-        setUsuario(data.user as AuthProviderUser);
-        setToken(data.token);
-        setIsLoading(false);
-        //window.location.replace(`${window.origin}/`);
+        setToken(data.auth_token);
+        setTimeout(() => {
+          api.get<AuthProviderUser>('/auth/users/me')
+            .then((response) => {
+              setUsuario(response.data);
+              setIsLoading(false);
+              toast.success(`Seja bem-vindo(a) ${response.data.first_name}`)
+            })
+        }, 500);
       },
       (error) => {
         setIsLoading(false);
@@ -69,7 +76,11 @@ export default function AuthProvider({ children }: PropsWithChildren<{}>) {
   }
 
   function sair() {
-    setUsuario(null);
+    api.post<AuthProviderUser>('/auth/token/logout')
+      .then(() => {
+        setUsuario(null);
+        setToken(null);
+      })
   }
 
   useEffect(() => {

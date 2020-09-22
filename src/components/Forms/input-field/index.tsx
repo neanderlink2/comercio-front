@@ -66,9 +66,10 @@ export default function InputField({
     }, [fieldName, registerField]);
 
     return (
-        <Form.Field>
+        <Form.Field required={required} error={!!error}>
             {label && <label>{label}</label>}
             <input ref={inputRef} name={fieldName} defaultValue={defaultValue} {...rest} />
+            {!!error && <div className="ui below pointing prompt label" role="alert">{error}</div>}
         </Form.Field>
     )
 }

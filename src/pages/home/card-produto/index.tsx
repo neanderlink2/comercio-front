@@ -4,28 +4,25 @@ import { Card, Image } from 'semantic-ui-react';
 import { Preco } from './styles';
 
 type CardProdutoProps = {
+    imagem: string;
     nome: string;
     preco: number;
-    qtdeVezes: number;
-    valorDividido: number;
 }
 
 const layout = `
-    imagem imagem
-    nome nome    
-    dividido preco
+    imagem
+    nome    
+    preco
 `;
 
-export default function CardProduto({ nome, preco, qtdeVezes, valorDividido }: CardProdutoProps) {
+export default function CardProduto({ imagem, nome, preco }: CardProdutoProps) {    
+    console.log(preco, 'PREÇO');
     return (
         <div>
             <Card link>
-                <Image src='https://picsum.photos/200' wrapped ui={false} />
+                <Image src={imagem} wrapped ui={false} />
                 <Card.Content>
                     <Card.Header>{nome}</Card.Header>
-                    <Card.Meta>
-                        {qtdeVezes}x {numeral(valorDividido).format('$ 0,0.00')} sem juros
-                </Card.Meta>
                     <Card.Description>
                         <Preco>{numeral(preco).format('$ 0,0.00')}</Preco>
                     </Card.Description>

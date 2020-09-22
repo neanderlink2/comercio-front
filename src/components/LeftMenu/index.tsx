@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { List } from 'semantic-ui-react';
 import { useFetch } from '../../hooks/useFetch';
 import { Categoria } from '../../models/Categoria';
+import { PagedList } from '../../models/PagedList';
 import { LeftMenuContainer } from './styles';
 
 const categorias = [
@@ -18,8 +19,8 @@ const categorias = [
 ]
 
 export default function LeftMenu() {
-    const history = useHistory();
-    const { response } = useFetch<Categoria[]>("/categorias");
+    const history = useHistory();    
+    const { response } = useFetch<PagedList<Categoria>>("/categorias/");
     return (
         <LeftMenuContainer>
             <List selection divided as="nav" verticalAlign='middle'>
@@ -34,7 +35,7 @@ export default function LeftMenu() {
                 <List.Item disabled>
                     <List.Header>Categorias</List.Header>
                 </List.Item>
-                {response?.map(categoria => (
+                {response?.results.map(categoria => (
                     <List.Item as="a"
                         key={`nav-${categoria.slug}`}
                         onClick={() => history.push(`/categoria/${categoria.slug}`)}

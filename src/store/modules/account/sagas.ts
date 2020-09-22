@@ -1,14 +1,14 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
-import { formatError } from '../../../api';
+import api, { formatError } from '../../../api';
+import { RegisterActions } from './actions/register';
 import { LoginActions } from './actions/tryLogin';
-import { TryLoginPayload } from './types';
+import { RegisterPayload, TryLoginPayload } from './types';
 
 function* tryLogin({ payload }: PayloadAction<TryLoginPayload>) {
     const { login, password, onSuccess, onFailed } = payload;
     try {
-        const response = yield call(axios.post, `https://localhost:32768/api/v1/account/login`, { email: login, senha: password });
+        const response = yield call(api.post, `/auth/token/login`, { email: login, password });
         yield put(LoginActions.success(response.data));
         if (onSuccess) {
             onSuccess(response.data);
@@ -22,6 +22,24 @@ function* tryLogin({ payload }: PayloadAction<TryLoginPayload>) {
     }
 }
 
+function* register({ payload }: PayloadAction<RegisterPayload>) {
+    const { data, onSuccess, onFailed } = payload;
+    try {
+        const response = yield call(api.post, `/auth/users/`, data);
+        yield put(RegisterActions.success(response.data));
+        if (onSuccess) {
+            onSuccess(response.data);
+        }
+    } catch (errors) {
+        const allErrors = formatError(errors);
+        yield put(RegisterActions.failed(allErrors));
+        if (onFailed) {
+            onFailed(allErrors);
+        }
+    }
+}
+
 export default all([
-    takeLatest(LoginActions.request.type, tryLogin)
+    takeLatest(LoginActions.request.type, tryLogin),
+    takeLatest(RegisterActions.request.type, register)
 ]);
