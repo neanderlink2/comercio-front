@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { ConfigInterface } from 'swr';
 import { HttpMethods } from '../models/Requests/RequestsMethods';
 
-export const URL_BASE_API = "http://atelie-livre.azurewebsites.net";
+export const URL_BASE_API = "https://atelie-livre.azurewebsites.net";
 const api = axios.create({ baseURL: URL_BASE_API, params: { format: 'json' } });
 api.interceptors.request.use(config => {
     const userToken = JSON.parse(localStorage.getItem("@app/userToken") ?? "");
