@@ -1,3 +1,4 @@
+import { useMediaQuery } from 'atomic-layout';
 import React from 'react';
 import { FiChevronRight, FiHome } from 'react-icons/fi';
 import { useHistory } from 'react-router-dom';
@@ -19,8 +20,14 @@ const categorias = [
 ]
 
 export default function LeftMenu() {
-    const history = useHistory();    
+    const history = useHistory();
     const { response } = useFetch<PagedList<Categoria>>("/categorias/");
+    const isMobile = useMediaQuery({ maxWidth: 768 }, false);
+
+    if (isMobile) {
+        return null;
+    }
+
     return (
         <LeftMenuContainer>
             <List selection divided as="nav" verticalAlign='middle'>

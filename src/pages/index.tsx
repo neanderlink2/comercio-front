@@ -13,28 +13,36 @@ const areas = `
   footer footer
 `
 
+const areasMobile = `
+  header 
+  principal
+  footer
+`
+
 export default function Pages() {
     const { authenticated } = useAuth();
 
     return (
-        <Composition areas={areas}
+        <Composition areas={areasMobile}
+            areasMd={areas}
             height="100vh"
+            width="100vw"
             templateCols="275px 1fr"
             templateRows="75px 1fr 100px"
         >
             {(Areas) => (
                 <>
-                    <Areas.Header as="header" flex>
+                    <Areas.Header as="header" flex flexGrow="1" width="100%">
                         <Header />
                     </Areas.Header>
-                    <Areas.LeftMenu as="aside" flex>
+                    <Areas.LeftMenu as="aside" flex flexGrow="1">
                         <LeftMenu />
                     </Areas.LeftMenu>
-                    <Areas.Principal as="main" flex>
+                    <Areas.Principal as="main" flex flexGrow="1">
                         <PublicRoutes />
                         {authenticated && <PrivateRoutes />}
                     </Areas.Principal>
-                    <Areas.Footer as="footer" flex>
+                    <Areas.Footer as="footer" flex flexGrow="1">
                         <Footer />
                     </Areas.Footer>
                 </>

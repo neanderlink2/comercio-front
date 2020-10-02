@@ -7,6 +7,7 @@ type CardProdutoProps = {
     imagem: string;
     nome: string;
     preco: number;
+    onCardClick: () => void;
 }
 
 const layout = `
@@ -15,11 +16,11 @@ const layout = `
     preco
 `;
 
-export default function CardProduto({ imagem, nome, preco }: CardProdutoProps) {    
+export default function CardProduto({ imagem, nome, preco, onCardClick }: CardProdutoProps) {
     console.log(preco, 'PREÇO');
     return (
-        <div>
-            <Card link>
+        <div style={{ width: '100%' }}>
+            <Card link onClick={onCardClick}>
                 <Image src={imagem} wrapped ui={false} />
                 <Card.Content>
                     <Card.Header>{nome}</Card.Header>

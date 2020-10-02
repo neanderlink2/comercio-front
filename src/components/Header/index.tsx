@@ -1,9 +1,11 @@
+import { useMediaQuery } from 'atomic-layout';
 import React from 'react';
-import { FiLogIn, FiLogOut, FiSearch, FiUserPlus } from 'react-icons/fi';
+import { FiLogIn, FiLogOut, FiMenu, FiSearch, FiShoppingCart, FiUserPlus } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { Button, Header as HeaderUi, Input } from 'semantic-ui-react';
+import { Link, useHistory } from 'react-router-dom';
+import { Button, Header as HeaderUi, Input, Label } from 'semantic-ui-react';
 import { useAuth } from '../../contexts/AuthProvider';
+import { useCart } from '../../contexts/CartProvider';
 import { SearchbarActions } from '../../store/modules/searchbar/actions/search';
 import { debounce } from '../../utils/debounce';
 import IconButton from '../IconButton';
@@ -12,13 +14,22 @@ import { ActionButtons, Container } from './styles';
 export default function Header() {
     const dispatch = useDispatch();
     const history = useHistory();
+    const isMobile = useMediaQuery({ maxWidth: 768 });
 
     const { authenticated, user, sair } = useAuth();
+
+    const { carrinho } = useCart();
 
     function handleSearch(search: string) {
         debounce(() => {
             dispatch(SearchbarActions.save(search))
         }, 750)();
+    }
+
+    if (isMobile) {
+        return (
+            <MobileHeader onSearch={handleSearch} />
+        )
     }
 
     return (
@@ -37,6 +48,11 @@ export default function Header() {
                 {authenticated ? (
                     <>
                         <span style={{ marginRight: 10 }}>{user?.first_name}</span>
+                        {carrinho.produtosDesejados.length > 0 && (
+                            <Label as={Link} to="/carrinho" color="blue" style={{ minWidth: 60, marginRight: 10 }}>
+                                <FiShoppingCart style={{ marginRight: 10 }} /> {carrinho.produtosDesejados.length}
+                            </Label>
+                        )}
                         <Button animated onClick={() => sair()}>
                             <Button.Content visible>Sair</Button.Content>
                             <Button.Content hidden>
@@ -63,6 +79,27 @@ export default function Header() {
                     )}
 
             </ActionButtons>
+        </Container>
+    )
+}
+
+type MobileHeaderProps = {
+    onSearch: (search: string) => void;
+}
+
+function MobileHeader({ onSearch }: MobileHeaderProps) {
+    return (
+        <Container>
+            <HeaderUi as="h1" textAlign="center"><FiMenu /> Ateliê livre</HeaderUi>
+            <div style={{ maxWidth: 350, width: '100%' }}>
+                <Input
+                    fluid
+                    labelPosition='left'
+                    icon={<IconButton title="Busca"><FiSearch /></IconButton>}
+                    placeholder='Buscar...'
+                    onChange={({ target }: any) => onSearch(target.value)}
+                />
+            </div>
         </Container>
     )
 }

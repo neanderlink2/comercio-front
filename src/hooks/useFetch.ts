@@ -1,5 +1,7 @@
 import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 import useSWR, { mutate } from "swr";
+import { useAuth } from "../contexts/AuthProvider";
 
 type FetchReturn<TResponse, TErrorResponse = any> = {
     response: TResponse,
@@ -10,6 +12,12 @@ type FetchReturn<TResponse, TErrorResponse = any> = {
 
 export function useFetch<TResponse = any, TErrorResponse = any>(url: string): FetchReturn<TResponse, TErrorResponse> {
     const { data, error } = useSWR<TResponse, AxiosError<TErrorResponse>>(url);
+    const { sair } = useAuth();
+
+    if (error?.response?.status === 401) {
+        toast.info("Seu token expirou, entre novamente em sua conta.");
+        sair();
+    }
 
     return {
         error,

@@ -19,8 +19,7 @@ export default function RegisterPage() {
 
     const isLoading = useTypedSelector(states => states.account.register.isRequesting);
 
-    async function handleSubmit(data: RegisterForm) {
-        console.log('USUARIO', data);
+    async function handleSubmit(data: RegisterForm) {        
         try {
             formRef.current?.setErrors({});
             const schema = createSchema(data.password);

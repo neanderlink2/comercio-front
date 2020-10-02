@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { SWRConfig } from 'swr';
 import { swrConfiguration } from './api';
 import AuthProvider from './contexts/AuthProvider';
+import CartProvider from './contexts/CartProvider';
 import ThemeToggleProvider from './contexts/ThemeToggleProvider';
 import ModulesRoutes from './routes/index.account';
 import store from './store';
@@ -41,14 +42,16 @@ export default function App() {
         <ReduxProvider store={store}>
             <ThemeToggleProvider initialSchema="light">
                 <AuthProvider>
-                    <SWRConfig value={swrConfiguration}>
-                        <BrowserRouter>
-                            {/*<Link to="/">Home</Link>
+                    <CartProvider>
+                        <SWRConfig value={swrConfiguration}>
+                            <BrowserRouter>
+                                {/*<Link to="/">Home</Link>
     <Link to="/login">Login</Link>*/}
-                            <ModulesRoutes />
-                            <ToastContainer />
-                        </BrowserRouter>
-                    </SWRConfig>
+                                <ModulesRoutes />
+                                <ToastContainer />
+                            </BrowserRouter>
+                        </SWRConfig>
+                    </CartProvider>
                 </AuthProvider>
             </ThemeToggleProvider>
         </ReduxProvider>

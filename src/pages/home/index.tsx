@@ -1,6 +1,6 @@
 import React from 'react';
 import { FiEye } from 'react-icons/fi';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { Message } from 'semantic-ui-react';
 import { useAuth } from '../../contexts/AuthProvider';
 import { useFetch } from '../../hooks/useFetch';
@@ -11,6 +11,7 @@ import CardProduto from './card-produto';
 import { Container } from './styles';
 
 export default function HomePage() {
+    const history = useHistory();
     const term = useTypedSelector(states => (
         states.searchbar.search.term
     ));
@@ -32,6 +33,7 @@ export default function HomePage() {
                     imagem={produto.image}
                     nome={produto.title}
                     preco={parseFloat(produto.price)}
+                    onCardClick={() => history.push(`/produto/${produto.slug}`)}
                 />
             ))}
         </Container>

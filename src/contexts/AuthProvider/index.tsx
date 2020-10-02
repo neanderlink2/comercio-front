@@ -80,6 +80,9 @@ export default function AuthProvider({ children }: PropsWithChildren<{}>) {
       .then(() => {
         setUsuario(null);
         setToken(null);
+      }).catch(() => {
+        setUsuario(null);
+        setToken(null);
       })
   }
 
