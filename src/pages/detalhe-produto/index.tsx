@@ -2,7 +2,9 @@ import { Composition } from 'atomic-layout';
 import numeral from 'numeral';
 import React, { useMemo, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { Button, Icon, Input } from 'semantic-ui-react';
+import { toast } from 'react-toastify';
+import { Button, Icon } from 'semantic-ui-react';
+import AmountButton from '../../components/AmountButton';
 import { useCart } from '../../contexts/CartProvider';
 import { useFetch } from '../../hooks/useFetch';
 import { Produto } from '../../models/Produto';
@@ -53,16 +55,28 @@ export default function DetalheProdutoPage() {
                             <StyledPrice>{numeral(parseFloat(produto.price)).format('$ 0,0.00')}</StyledPrice>
                         </Preco>
                         <Comprar>
-                            <Input
+                            <AmountButton
                                 label="Quantidade"
-                                type="number"
+                                value={quantidade}
                                 onChange={({ target }) => setQuantidade(parseInt(target.value))}
-                                defaultValue="1"
-                                min={1}
-                                max={99}
-                                step={1}
+                                onAddClick={() => {
+                                    if (quantidade < 99) {
+                                        setQuantidade((oldValue) => oldValue + 1)
+                                    }
+                                }}
+                                onRemoveClick={() => {
+                                    if (quantidade > 1) {
+                                        setQuantidade((oldValue) => oldValue - 1)
+                                    }
+                                }}
                             />
-                            <Button primary onClick={() => addProduto(produto, quantidade)}>
+                            <Button primary onClick={() => {
+                                if (quantidade <= 0) {
+                                    toast.warn("Selecione ao menos 1 unidade.");
+                                    return;
+                                }
+                                addProduto(produto, quantidade);
+                            }}>
                                 {produtoJaAdicionado ? 'Adicionar mais' : 'Adicionar ao carrinho'}
                             </Button>
                         </Comprar>

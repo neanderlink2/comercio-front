@@ -54,7 +54,7 @@ export default function CartProvider({ children }: PropsWithChildren<any>) {
         }
         const novosProdutosDesejados = [
             ...carrinho.produtosDesejados.filter(desejo => desejo.produto.id !== idProduto),
-            { produto: produtoExistente.produto, quantidade: (produtoExistente?.quantidade ?? 0) + quantidade }
+            { produto: produtoExistente.produto, quantidade }
         ];
         const total = novosProdutosDesejados.reduce(getTotal, 0);
         const carrinhoAtualizado: Carrinho = {
@@ -63,7 +63,6 @@ export default function CartProvider({ children }: PropsWithChildren<any>) {
             total
         };
         setCarrinho(carrinhoAtualizado);
-        toast.success(`Produto '${produtoExistente.produto.title}' foi alterado.`);
     }, [carrinho, setCarrinho]);
 
     const removeProduto = useCallback((idProduto: number) => {
@@ -80,7 +79,6 @@ export default function CartProvider({ children }: PropsWithChildren<any>) {
 
     const cleanCarrinho = useCallback(() => {
         setCarrinho({ produtosDesejados: [], total: 0 });
-        toast.info(`Seu carrinho está limpo.`);
     }, [setCarrinho]);
 
     return (

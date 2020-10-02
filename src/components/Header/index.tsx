@@ -1,6 +1,6 @@
 import { useMediaQuery } from 'atomic-layout';
 import React from 'react';
-import { FiLogIn, FiLogOut, FiMenu, FiSearch, FiShoppingCart, FiUserPlus } from 'react-icons/fi';
+import { FiLogIn, FiLogOut, FiMenu, FiSearch, FiShoppingCart, FiUser, FiUserPlus } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Button, Header as HeaderUi, Input, Label } from 'semantic-ui-react';
@@ -47,10 +47,13 @@ export default function Header() {
             <ActionButtons>
                 {authenticated ? (
                     <>
-                        <span style={{ marginRight: 10 }}>{user?.first_name}</span>
+                        <Label as={Link} to="/conta/detalhes" style={{ minWidth: 120, marginRight: 10 }}>
+                            <FiUser style={{marginRight: 10}} /> {user?.first_name}
+                        </Label>
                         {carrinho.produtosDesejados.length > 0 && (
                             <Label as={Link} to="/carrinho" color="blue" style={{ minWidth: 60, marginRight: 10 }}>
-                                <FiShoppingCart style={{ marginRight: 10 }} /> {carrinho.produtosDesejados.length}
+                                <FiShoppingCart style={{ marginRight: 10 }} />
+                                {carrinho.produtosDesejados.reduce((prev, desejo) => prev + desejo.quantidade, 0)}
                             </Label>
                         )}
                         <Button animated onClick={() => sair()}>

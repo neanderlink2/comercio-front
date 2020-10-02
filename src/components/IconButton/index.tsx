@@ -1,15 +1,15 @@
 import React from 'react';
-import { Button, Popup } from 'semantic-ui-react';
+import { Button, ButtonProps, Popup } from 'semantic-ui-react';
 
-type IconButtonProps = {
+type IconButtonProps = ButtonProps & {
     children: React.ReactNode;
     title?: string;
 }
 
-export default function IconButton({ children, title }: IconButtonProps) {
+export default function IconButton({ children, title, ...props }: IconButtonProps) {
     return (
         <Popup content={title} trigger={
-            <Button icon>
+            <Button icon {...props}>
                 {children}
             </Button>
         } />

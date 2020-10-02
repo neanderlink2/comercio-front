@@ -13,7 +13,7 @@ function* saveCart({ payload }: PayloadAction<SaveCartPayload>) {
         }));
         const total = data.produtosDesejados.reduce((prev, desejo) => prev + parseFloat(desejo.produto.price) * desejo.quantidade, 0);
 
-        const response = yield call(api.post, `/auth/token/login`, { carrinho, total });
+        const response = yield call(api.post, `/pedidos/`, { carrinho, total });
         yield put(SaveCartActions.success(response.data));
         if (onSuccess) {
             onSuccess(response.data);

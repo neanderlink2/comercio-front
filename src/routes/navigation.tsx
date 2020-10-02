@@ -1,4 +1,5 @@
 import React from 'react';
+import AccountDetailsPage from '../pages/account/details';
 import DetalheProdutoPage from '../pages/detalhe-produto';
 import HomePage from '../pages/home';
 import ListaCarrinhoPage from '../pages/lista-carrinho';
@@ -9,4 +10,5 @@ export const publicRoutes = [
     { path: '/categoria/:slugCategoria', render: (props: any) => <HomePage {...props} />, navigationName: 'Início' },
     { path: '/produto/:slugProduto', render: (props: any) => <DetalheProdutoPage {...props} />, navigationName: 'Início' },
     { path: '/carrinho', render: (props: any) => <ListaCarrinhoPage {...props} />, navigationName: 'Início' },
+    { path: '/conta/detalhes', render: (props: any) => <AccountDetailsPage {...props} />, navigationName: 'Início' },
 ]
