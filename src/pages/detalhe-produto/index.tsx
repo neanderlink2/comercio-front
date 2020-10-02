@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, Icon } from 'semantic-ui-react';
 import AmountButton from '../../components/AmountButton';
+import { useAuth } from '../../contexts/AuthProvider';
 import { useCart } from '../../contexts/CartProvider';
 import { useFetch } from '../../hooks/useFetch';
 import { Produto } from '../../models/Produto';
@@ -23,7 +24,7 @@ export default function DetalheProdutoPage() {
     const { slugProduto } = useParams<{ slugProduto: string }>();
     const { response: produto, isLoading } = useFetch<Produto>(`/produtos/${slugProduto}`);
     const { addProduto, carrinho } = useCart();
-
+    const { authenticated } = useAuth();
     const produtoJaAdicionado = useMemo(() => {
         if (produto && carrinho.produtosDesejados.length > 0) {
             return carrinho.produtosDesejados.some((desejo) => desejo.produto.id === produto.id);
@@ -71,6 +72,10 @@ export default function DetalheProdutoPage() {
                                 }}
                             />
                             <Button primary onClick={() => {
+                                if (authenticated) {
+                                    toast.info("Você precisa estar autenticado para adicionar itens ao carrinho.");
+                                    return;
+                                }
                                 if (quantidade <= 0) {
                                     toast.warn("Selecione ao menos 1 unidade.");
                                     return;

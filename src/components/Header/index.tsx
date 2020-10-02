@@ -18,7 +18,7 @@ export default function Header() {
 
     const { authenticated, user, sair } = useAuth();
 
-    const { carrinho } = useCart();
+    const { carrinho, cleanCarrinho } = useCart();
 
     function handleSearch(search: string) {
         debounce(() => {
@@ -48,7 +48,7 @@ export default function Header() {
                 {authenticated ? (
                     <>
                         <Label as={Link} to="/conta/detalhes" style={{ minWidth: 120, marginRight: 10 }}>
-                            <FiUser style={{marginRight: 10}} /> {user?.first_name}
+                            <FiUser style={{ marginRight: 10 }} /> {user?.first_name}
                         </Label>
                         {carrinho.produtosDesejados.length > 0 && (
                             <Label as={Link} to="/carrinho" color="blue" style={{ minWidth: 60, marginRight: 10 }}>
@@ -56,7 +56,10 @@ export default function Header() {
                                 {carrinho.produtosDesejados.reduce((prev, desejo) => prev + desejo.quantidade, 0)}
                             </Label>
                         )}
-                        <Button animated onClick={() => sair()}>
+                        <Button animated onClick={() => {
+                            cleanCarrinho();
+                            sair();
+                        }}>
                             <Button.Content visible>Sair</Button.Content>
                             <Button.Content hidden>
                                 <FiLogOut />
