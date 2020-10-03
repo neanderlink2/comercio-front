@@ -72,7 +72,7 @@ export default function DetalheProdutoPage() {
                                 }}
                             />
                             <Button primary onClick={() => {
-                                if (authenticated) {
+                                if (!authenticated) {
                                     toast.info("Você precisa estar autenticado para adicionar itens ao carrinho.");
                                     return;
                                 }
