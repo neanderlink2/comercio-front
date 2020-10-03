@@ -9,14 +9,12 @@ import PublicRoutes from '../routes/index.public';
 
 const areas = `
   header header
-  leftMenu principal
-  footer footer
+  leftMenu principal  
 `
 
 const areasMobile = `
   header 
-  principal
-  footer
+  principal  
 `
 
 export default function Pages() {

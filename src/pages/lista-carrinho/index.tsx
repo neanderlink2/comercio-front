@@ -32,6 +32,14 @@ export default function ListaCarrinhoPage() {
         }))
     }
 
+    if (carrinho.produtosDesejados.length === 0) {
+        return (
+            <Container fluid style={{ paddingRight: 35 }}>
+                <span>Nenhum produto foi adicionado ao seu carrinho ainda...</span>
+            </Container>
+        )
+    }
+
     return (
         <Container fluid style={{ paddingRight: 35 }}>
             <List divided animated>

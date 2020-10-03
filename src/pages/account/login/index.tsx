@@ -44,6 +44,7 @@ export default function LoginPage() {
                             <InputField
                                 name="password"
                                 label="Senha"
+                                type="password"                                
                             />
                             <Button loading={loading} primary fluid size="large" type="submit">
                                 Entrar
