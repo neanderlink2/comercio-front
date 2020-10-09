@@ -1,16 +1,18 @@
+import { loadStripe } from '@stripe/stripe-js';
 import numeral from 'numeral';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FiTrash } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { Button, Container, Image, List } from 'semantic-ui-react';
+import api from '../../api';
 import AmountButton from '../../components/AmountButton';
 import IconButton from '../../components/IconButton';
 import { useCart } from '../../contexts/CartProvider';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
-import { SaveCartActions } from '../../store/modules/cart/actions/save';
 import { DescricaoProduto, PrecoTotal } from './styles';
+
+const stripePromise = loadStripe('pk_test_51HaB87Da9E4DnCFSAcHdNaM1MChFTdVBAUuwfqLx2UsYLOZdTjT6apZY0zMWSn031K1Yy3yA9AeBNED7nKrGvEiA00X6NUkoCu');
 
 export default function ListaCarrinhoPage() {
     const dispatch = useDispatch();
@@ -18,19 +20,29 @@ export default function ListaCarrinhoPage() {
     const { carrinho, alterarQuantidadeProduto, removeProduto, cleanCarrinho } = useCart();
     const loadingSave = useTypedSelector(states => states.cart.save.isRequesting);
 
-    function salvarCompras() {
-        dispatch(SaveCartActions.request({
-            data: carrinho,
-            onSuccess: () => {
-                toast.success("Compra efetuada com sucesso! Em breve seus produtos estarão em sua casa.");
-                history.push("/");
-                cleanCarrinho();
-            },
-            onFailed: () => {
-                toast.error("Houve um problema enquanto processávamos a sua compra. Tente novamente mais tarde.");
+    const processarCompra = useCallback(async (event: any) => {
+        // Get Stripe.js instance
+        const stripe = await stripePromise;
+        const body = carrinho.produtosDesejados.map(desejo => ({
+            id_produto: desejo.produto.id,
+            quantidade: desejo.quantidade
+        }));
+        // Call your backend to create the Checkout Session
+        const response = await api.post('/pedidos/create-checkout-session/', body);
+
+        // When the customer clicks on the button, redirect them to Checkout.
+        if (stripe) {
+            const result = await stripe.redirectToCheckout({
+                sessionId: response.data.session_id,
+            });
+
+            if (result.error) {
+                // If `redirectToCheckout` fails due to a browser or network
+                // error, display the localized error message to your customer
+                // using `result.error.message`.
             }
-        }))
-    }
+        }
+    }, [carrinho]);  
 
     if (carrinho.produtosDesejados.length === 0) {
         return (
@@ -58,7 +70,7 @@ export default function ListaCarrinhoPage() {
                             <List.Header as={Link} to={`/produto/${desejo.produto.slug}`}>{desejo.produto.title}</List.Header>
                             <List.Description style={{ marginTop: 10 }}>
                                 Quantidade:
-                                    <AmountButton
+                                <AmountButton
                                     style={{ marginLeft: 10 }}
                                     value={desejo.quantidade}
                                     onAddClick={() => {
@@ -88,7 +100,7 @@ export default function ListaCarrinhoPage() {
             <PrecoTotal><label>Total:</label> {numeral(carrinho.total).format('$ 0,0.00')}</PrecoTotal>
             <div style={{ textAlign: 'right' }}>
                 <Button onClick={cleanCarrinho} style={{ marginRight: 10 }}>Limpar carrinho</Button>
-                <Button primary loading={loadingSave} onClick={salvarCompras}>Completar compra</Button>
+                <Button primary loading={loadingSave} onClick={processarCompra}>Completar compra</Button>
             </div>
         </Container>
     )
